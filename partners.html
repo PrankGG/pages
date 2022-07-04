@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>prank.gg</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+      integrity="sha256-rTpdO0HXBCNpreAHcu6tB2Ppg515Vo+5GtYSsnNLz+8="
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <section class="hero is-large" style="background-color: #111827">
+      <div class="hero-body">
+        <p class="title has-text-white" style="text-align: center">Partners</p>
+        <div
+          class="columns is-multiline"
+          style="text-align: center"
+          id="partnersOutput"
+        ></div>
+      </div>
+    </section>
+    <script
+      src="https://cdn.jsdelivr.net/npm/ejs@3.1.8/ejs.min.js"
+      integrity="sha256-Y2nh8REXJuW3b7k2ytbjm+2IZO0pOsME5Tq+t3HRb8E="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      fetch("https://assets.prank.gg/prankgg/data/partners.json")
+        .then((res) => res.json())
+        .then((json) => {
+          console.log("fetched partners data. " + json);
+          let html = ejs.render(
+            `<% json.forEach((o) => { %>
+              <div class="column">
+   <div
+      class="card"
+      style="background-color: #1f2937"
+      onclick="window.open('<%= o.url %>', '_newtab')"
+      >
+      <div class="card-content">
+         <img
+            src="<%= o.logo %>"
+            alt="Logo of <%= o.name %> (very cool)"
+            width="128"
+            height="128"
+            style="border-radius: 15%"
+            />
+         <p class="title has-text-white"><%= o.name %></p>
+         <p class="subtitle has-text-white"><%= o.subtitle %></p>
+      </div>
+   </div>
+</div>
+            <% }) %>`,
+            { json }
+          );
+          document.getElementById("partnersOutput").innerHTML = html;
+        });
+    </script>
+  </body>
+</html>
